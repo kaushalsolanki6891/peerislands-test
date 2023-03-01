@@ -29,9 +29,7 @@ public class Employee {
     @Column(name = "age")
     private Integer age;
 
-    //@OneToMany(cascade = CascadeType.ALL)
     @OneToMany(mappedBy = "employee", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-    //@JoinColumn(name = "EMPLOYEE_ID")
     @JsonManagedReference
     private Set<Hobby> hobbies;
 
