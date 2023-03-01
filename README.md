@@ -1,7 +1,13 @@
 # peerislands-test
 peerislands-search-test
 
+Able to see the query in console need to think a logic for hack library class and get generated query
+Assuming that final requirement will be provide dynamic search functionality.
+
+
 #sample payload
+
+
 Payload 1 : Equal operator
 {
   "pageNumber": 0,
