@@ -25,7 +25,7 @@ public class SpecificationUtil {
                 }
             }
 
-            List<SearchFilter> searchFilters = searchQuery.getSearchFitler();
+            List<SearchFilter> searchFilters = searchQuery.getSearchFilter();
 
             if (searchFilters != null && !searchFilters.isEmpty()) {
 

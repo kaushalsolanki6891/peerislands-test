@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class SearchQuery {
-    private List<SearchFilter> searchFitler;
+    private List<SearchFilter> searchFilter;
 
     private int pageNumber;
     private int pageSize;
@@ -14,10 +14,5 @@ public class SearchQuery {
     private SortOrder sortOrder;
 
     private List<JoinColumnProps> joinColumnProps;
-
-    public List<SearchFilter> getSearchFitler() {
-        return searchFitler;
-    }
-
 
 }
