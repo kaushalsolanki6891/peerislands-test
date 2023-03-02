@@ -26,4 +26,12 @@ public class EmployeeSearchController {
         return new ResponseEntity<>(employeeList, HttpStatus.OK);
     }
 
+    @PostMapping("/query")
+    public ResponseEntity<String> searchEmployeesQuery(@RequestBody SearchQuery searchQuery) {
+
+        String sqlQuery = employeeService.searchEmployeeQuery(searchQuery);
+
+        return new ResponseEntity<>(sqlQuery, HttpStatus.OK);
+    }
+
 }

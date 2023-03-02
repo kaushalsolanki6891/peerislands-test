@@ -1,12 +1,13 @@
 package com.peerislands.service;
 
 import com.peerislands.dto.EmployeeDTO;
-import com.peerislands.exception.RecordNotFoundException;
 import com.peerislands.mapper.EmployeeMapper;
 import com.peerislands.mapper.HobbyMapper;
 import com.peerislands.model.Employee;
+import com.peerislands.model.GenerateQueryHack;
 import com.peerislands.model.Hobby;
 import com.peerislands.repository.EmployeeRepository;
+import com.peerislands.repository.ExtendedEmployeeRepository;
 import com.peerislands.request.SearchQuery;
 import com.peerislands.utils.SpecificationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +29,28 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
 
     @Autowired
+    private ExtendedEmployeeRepository extendedEmployeeRepository;
+
+    @Autowired
     private EmployeeMapper employeeMapper;
 
     @Autowired
     private HobbyMapper hobbyMapper;
 
+
+    public String searchEmployeeQuery(SearchQuery searchQuery) {
+
+        Specification<Employee> spec = SpecificationUtil.bySearchQuery(searchQuery, Employee.class);
+        PageRequest pageRequest = getPageRequest(searchQuery);
+        String generatedSql = extendedEmployeeRepository.getGeneratedQuery(new GenerateQueryHack(spec, pageRequest));
+
+        return generatedSql;
+    }
+
     public List<Employee> searchEmployee(SearchQuery searchQuery) {
 
         Specification<Employee> spec = SpecificationUtil.bySearchQuery(searchQuery, Employee.class);
         PageRequest pageRequest = getPageRequest(searchQuery);
-
         Page<Employee> page = employeeRepository.findAll(spec, pageRequest);
 
         return page.getContent();
