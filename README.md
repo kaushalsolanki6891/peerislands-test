@@ -4,6 +4,8 @@ peerislands-search-test
 Able to see the query in console need to think a logic for hack library class and get generated query
 Assuming that final requirement will be provide dynamic search functionality.
 
+swagger :  http://localhost:8080/swagger-ui.html
+h2 console : http://localhost:8080/h2
 
 #sample payload
 
