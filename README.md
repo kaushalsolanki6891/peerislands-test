@@ -85,19 +85,23 @@ select employee0_.id as id1_0_, employee0_.age as age2_0_, employee0_.email as e
 where hobbies1_.hobby in (?) order by employee0_.first_name asc, employee0_.last_name desc
 
 ########################################################
-Payload 3 :  age = 32 and hobby is Chess.
+Payload 3 :  age = 31 and hobby is Chess.
 ########################################################
 
-{
-  "pageNumber": 0,
-  "pageSize": 10,
-  "searchFitler": [
+curl -X 'POST' \
+  'http://localhost:8080/employees/search/query' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "searchFilter": [
     {
       "operator": "=",
       "fieldName": "age",
       "fieldValue": 31
     }
   ],
+  "pageNumber": 0,
+  "pageSize": 10,
   "sortOrder": {
     "ascendingOrder": [
       "firstName"
@@ -106,21 +110,21 @@ Payload 3 :  age = 32 and hobby is Chess.
       "lastName"
     ]
   },
-  "joinColumnProps" : [
-  {
-    "joinColumnName" : "hobbies",
-    "searchFilter" : {
-      "operator": "=",
-      "fieldName": "hobby",
-      "fieldValue": "Chess"
+  "joinColumnProps": [
+    {
+      "joinColumnName": "hobbies",
+      "searchFilter": {
+        "operator": "=",
+        "fieldName": "hobby",
+        "fieldValue": "Chess"
+      }
     }
-   }
   ]
-}
+}'
 
 
 OUTPUT Query : 
 
 select employee0_.id as id1_0_, employee0_.age as age2_0_, employee0_.email as email3_0_, employee0_.first_name as first_na4_0_, employee0_.last_name as last_nam5_0_ from tbl_employees employee0_ inner join tbl_hobbies hobbies1_ on employee0_.id=hobbies1_.employee_id 
-where hobbies1_.hobby=? order by employee0_.first_name asc, employee0_.last_name desc
+where hobbies1_.hobby=? and employee0_.age=31 order by employee0_.first_name asc, employee0_.last_name desc
 ########################################################
