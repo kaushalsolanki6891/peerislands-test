@@ -9,6 +9,7 @@ import com.peerislands.model.Hobby;
 import com.peerislands.repository.EmployeeRepository;
 import com.peerislands.repository.ExtendedEmployeeRepository;
 import com.peerislands.request.SearchQuery;
+import com.peerislands.request.SearchQueryRequest;
 import com.peerislands.utils.SpecificationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,52 +39,20 @@ public class EmployeeService {
     private HobbyMapper hobbyMapper;
 
 
-    public String searchEmployeeQuery(SearchQuery searchQuery) {
+    public String searchEmployeeQuery(SearchQueryRequest searchQueryRequest) {
 
-        Specification<Employee> spec = SpecificationUtil.bySearchQuery(searchQuery, Employee.class);
-        PageRequest pageRequest = getPageRequest(searchQuery);
+        PageRequest pageRequest = SpecificationUtil.getPageRequest(searchQueryRequest);
+        Specification<Employee> spec = SpecificationUtil.prepareSearchQuery(searchQueryRequest, Employee.class);
         String generatedSql = extendedEmployeeRepository.getGeneratedQuery(new GenerateQueryHack(spec, pageRequest));
 
         return generatedSql;
     }
 
-    public List<Employee> searchEmployee(SearchQuery searchQuery) {
-
-        Specification<Employee> spec = SpecificationUtil.bySearchQuery(searchQuery, Employee.class);
-        PageRequest pageRequest = getPageRequest(searchQuery);
+    public List<Employee> searchEmployee(SearchQueryRequest searchQueryRequest) {
+        PageRequest pageRequest = SpecificationUtil.getPageRequest(searchQueryRequest);
+        Specification<Employee> spec = SpecificationUtil.prepareSearchQuery(searchQueryRequest, Employee.class);
         Page<Employee> page = employeeRepository.findAll(spec, pageRequest);
-
         return page.getContent();
-    }
-
-    private PageRequest getPageRequest(SearchQuery searchQuery) {
-
-        int pageNumber = searchQuery.getPageNumber();
-        int pageSize = searchQuery.getPageSize();
-
-        List<Sort.Order> orders = new ArrayList<>();
-
-        List<String> ascProps = searchQuery.getSortOrder().getAscendingOrder();
-
-        if (ascProps != null && !ascProps.isEmpty()) {
-            for (String prop : ascProps) {
-                orders.add(Sort.Order.asc(prop));
-            }
-        }
-
-        List<String> descProps = searchQuery.getSortOrder().getDescendingOrder();
-
-        if (descProps != null && !descProps.isEmpty()) {
-            for (String prop : descProps) {
-                orders.add(Sort.Order.desc(prop));
-            }
-
-        }
-
-        Sort sort = Sort.by(orders);
-
-        return PageRequest.of(pageNumber, pageSize, sort);
-
     }
 
     @Transactional
